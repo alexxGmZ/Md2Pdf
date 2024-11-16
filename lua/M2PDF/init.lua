@@ -1,6 +1,14 @@
 local autocmd_id
 local M = {}
 
+--- vim.notify with nvim-notify support
+---@param message string|table
+---@param log_level string|nil
+---@return function vim.notify
+local function notify(message, log_level)
+   return vim.notify(message, log_level, { title = "Md2Pdf" })
+end
+
 local function start()
    print("start()")
    if autocmd_id then return end
@@ -13,14 +21,14 @@ local function start()
          local pandoc_var = "geometry:margin=1in"
          local command = { "pandoc", md_file, "-o", pdf_file, "-V", pandoc_var }
 
-         vim.notify(md_file)
-         vim.notify(pdf_file)
-         vim.notify(pandoc_var)
-         vim.notify(command)
+         notify(md_file)
+         notify(pdf_file)
+         notify(pandoc_var)
+         notify(command)
 
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
-               vim.notify(obj.stderr, "WARN")
+               notify(obj.stderr, "WARN")
             end
          end)
       end
