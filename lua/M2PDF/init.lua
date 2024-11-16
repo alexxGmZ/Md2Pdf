@@ -44,7 +44,7 @@ local function stop()
 end
 
 function M.setup()
-   vim.api.nvim_create_user_command("M2PDF", function(args)
+   vim.api.nvim_create_user_command("Md2Pdf", function(args)
       local arg = args.fargs[1] or ""
 
       if arg == "stop" then
