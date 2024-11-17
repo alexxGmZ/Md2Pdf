@@ -20,6 +20,7 @@ local function start(config)
 
    autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*.md",
+      group = vim.api.nvim_create_augroup("Md2Pdf", {}),
       callback = function()
          local md_file = vim.api.nvim_buf_get_name(0)
          local pdf_file = string.gsub(md_file, ".md", ".pdf")
