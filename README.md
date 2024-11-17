@@ -11,6 +11,11 @@ A Markdown to Pdf converter.
 
 * [pandoc](https://pandoc.org/)
 
+**Recommended Pdf Viewers:**
+
+* [zathura](https://pwmt.org/projects/zathura/)
+* Or any pdf viewers that updates whenever changes are applied.
+
 <br>
 
 ## WHY?
