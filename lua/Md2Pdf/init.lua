@@ -1,3 +1,4 @@
+local default_config = require("Md2Pdf.config").default_config
 local autocmd_id
 local M = {}
 
@@ -9,23 +10,26 @@ local function notify(message, log_level)
    return vim.notify(message, log_level, { title = "Md2Pdf" })
 end
 
-local function start()
+--- Start the auto command
+---@param config table
+local function start(config)
    print("start()")
    if autocmd_id then return end
+
+   local pandoc_var = { "-V", config.variables }
 
    autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*.md",
       callback = function()
          local md_file = vim.api.nvim_buf_get_name(0)
          local pdf_file = string.gsub(md_file, ".md", ".pdf")
-         local pandoc_var = "geometry:margin=1in"
-         local command = { "pandoc", md_file, "-o", pdf_file, "-V", pandoc_var }
+         local command = { "pandoc", md_file, "-o", pdf_file }
 
-         notify(md_file)
-         notify(pdf_file)
-         notify(pandoc_var)
+         for _, value in ipairs(pandoc_var) do
+            table.insert(command, value)
+         end
+
          notify(command)
-
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
                notify(obj.stderr, "WARN")
@@ -36,6 +40,7 @@ local function start()
    print(autocmd_id)
 end
 
+--- Stop the auto command
 local function stop()
    print("stop()")
    if not autocmd_id then return end
@@ -43,7 +48,9 @@ local function stop()
    autocmd_id = nil
 end
 
-function M.setup()
+--- Setup the plugin.
+---@param opts table Configuration options
+function M.setup(opts)
    vim.api.nvim_create_user_command("Md2Pdf", function(args)
       local arg = args.fargs[1] or ""
 
@@ -51,13 +58,20 @@ function M.setup()
          return stop()
       end
 
-      start()
+      local config = default_config
+      if opts and next(opts) then
+         config = opts
+      end
+
+      start(config)
    end, {
       nargs = "*",
       complete = function()
          return { "start", "stop" }
       end
    })
+
+   -- vim.cmd("Md2Pdf start")
 end
 
 return M
