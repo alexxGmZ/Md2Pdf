@@ -1,6 +1,6 @@
 # Md2Pdf
 
-A Markdown to Pdf converter.
+A Markdown to Pdf converter inside Neovim.
 
 > [!WARNING]
 > Currently in Beta state.
@@ -24,6 +24,19 @@ A Markdown to Pdf converter.
 
 <br>
 
+## Installation
+
+**Lazy:**
+
+```lua
+{
+   "alexxGmZ/Md2Pdf",
+   cmd = "Md2Pdf"
+}
+```
+
+<br>
+
 ## Usage
 
 Start converting Markdown (*.md) file to Pdf after saving or writing the file. The Pdf is
@@ -39,5 +52,10 @@ Stop converting.
 
 <br>
 
-## TODO
-* [ ] Add basic configuration.
+## Configuration
+
+```lua
+require("Md2Pdf").setup({
+   variables = "geometry:margin=1in" -- -V flag
+})
+```
