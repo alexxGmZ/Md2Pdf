@@ -1,7 +1,7 @@
 local M = {}
 
 M.default_config = {
-   variables = "geometry:margin=1in", -- -V flag
+   pdf_engine = "pdflatex"
 }
 
 return M

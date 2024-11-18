@@ -15,24 +15,25 @@ end
 local function start(config)
    if autocmd_id then return end
 
-   local pandoc_var = { "-V", config.variables }
-
    autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*.md",
       group = vim.api.nvim_create_augroup("Md2Pdf", {}),
       callback = function()
          local md_file = vim.api.nvim_buf_get_name(0)
          local pdf_file = string.gsub(md_file, ".md", ".pdf")
-         local command = { "pandoc", md_file, "-o", pdf_file }
-
-         for _, value in ipairs(pandoc_var) do
-            table.insert(command, value)
-         end
+         local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
+         local notify_table_data = {
+            "Pdf Engine: ", config.pdf_engine, "\n",
+            "md        : ", md_file, "\n",
+            "pdf       : ", pdf_file
+         }
 
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
-               notify(obj.stderr, "WARN")
+               return notify(obj.stderr, "WARN")
             end
+
+            notify(table.concat(notify_table_data))
          end)
       end
    })
@@ -67,8 +68,6 @@ function M.setup(opts)
          return { "start", "stop" }
       end
    })
-
-   -- vim.cmd("Md2Pdf start")
 end
 
 return M
