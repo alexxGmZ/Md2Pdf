@@ -34,7 +34,7 @@ local function start(config)
       group = vim.api.nvim_create_augroup("Md2Pdf", {}),
       callback = function()
          local md_file = vim.api.nvim_buf_get_name(0)
-         local pdf_file = string.gsub(md_file, ".md", ".pdf")
+         local pdf_file = md_file:gsub("%.md$", ".pdf")
          local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
          local notify_table_data = {
             "Pdf Engine: ", config.pdf_engine, "\n",
@@ -42,23 +42,16 @@ local function start(config)
             "pdf       : ", pdf_file
          }
 
-         -- NOTE: This implementation is open for change because it's not the best
-         -- implementation. I think the better implementation is to kill the previous
-         -- running pdf engine process and finish the latest process, so that the latest
-         -- file change will be applied to the converted pdf file.
-
-         -- prevent the conversion if the pdf engine is running
+         -- kill the previous process to finish the latest process
          if is_pdf_engine_running(config.pdf_engine) then
-            notify("On-going conversion", "WARN")
-            return
+            local process_to_kill = "pandoc " .. md_file
+            vim.system({ "pkill", "-f", process_to_kill }):wait()
          end
 
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
                return notify(obj.stderr, "WARN")
             end
-
-            notify(table.concat(notify_table_data))
          end)
       end
    })
