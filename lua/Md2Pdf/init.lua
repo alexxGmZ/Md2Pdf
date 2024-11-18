@@ -13,7 +13,6 @@ end
 --- Start the auto command
 ---@param config table
 local function start(config)
-   print("start()")
    if autocmd_id then return end
 
    local pandoc_var = { "-V", config.variables }
@@ -30,7 +29,6 @@ local function start(config)
             table.insert(command, value)
          end
 
-         notify(command)
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
                notify(obj.stderr, "WARN")
@@ -38,12 +36,10 @@ local function start(config)
          end)
       end
    })
-   print(autocmd_id)
 end
 
 --- Stop the auto command
 local function stop()
-   print("stop()")
    if not autocmd_id then return end
    vim.api.nvim_del_autocmd(autocmd_id)
    autocmd_id = nil
