@@ -10,6 +10,9 @@ A Markdown to Pdf converter inside Neovim.
 **Dependencies:**
 
 * [pandoc](https://pandoc.org/)
+* Optional (if you want to use other pdf engine other than pdflatex):
+   - texlive-luatex (for lualatex)
+   - texlive-xetex (for xelatex)
 
 **Recommended Pdf Viewers:**
 
@@ -41,13 +44,34 @@ A Markdown to Pdf converter inside Neovim.
 
 Start converting Markdown (*.md) file to Pdf after saving or writing the file. The Pdf is
 located in the same directory as the Markdown file.
+
 ```
+:Md2Pdf
 :Md2Pdf start
 ```
 
 Stop converting.
+
 ```
 :Md2Pdf stop
+```
+
+Add **Variables** in the Markdown file by adding YAML metadata blocks at the top.
+
+> [!NOTE]
+> Just read the pandoc documentation or Google it to know more.
+
+```markdown
+---
+header-includes:
+- \usepackage{fontspec}
+
+geometry:
+- margin=1cm
+
+fontsize: 12pt
+monofont: "FiraCode Nerd Font"
+...
 ```
 
 <br>
@@ -56,6 +80,6 @@ Stop converting.
 
 ```lua
 require("Md2Pdf").setup({
-   variables = "geometry:margin=1in" -- -V flag
+   pdf_engine = "pdflatex" -- pdflatex, lualatex, or xelatex
 })
 ```
