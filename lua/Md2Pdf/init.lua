@@ -10,6 +10,20 @@ local function notify(message, log_level)
    return vim.notify(message, log_level, { title = "Md2Pdf" })
 end
 
+--- check if the pdf engine process is running
+---@param pdf_engine string
+---@return boolean
+local function is_pdf_engine_running(pdf_engine)
+   local command = { "pgrep", pdf_engine }
+   local obj = vim.system(command, { text = true }):wait()
+
+   if obj.stdout ~= "" then
+      return true
+   end
+
+   return false
+end
+
 --- Start the auto command
 ---@param config table
 local function start(config)
@@ -27,6 +41,17 @@ local function start(config)
             "md        : ", md_file, "\n",
             "pdf       : ", pdf_file
          }
+
+         -- NOTE: This implementation is open for change because it's not the best
+         -- implementation. I think the better implementation is to kill the previous
+         -- running pdf engine process and finish the latest process, so that the latest
+         -- file change will be applied to the converted pdf file.
+
+         -- prevent the conversion if the pdf engine is running
+         if is_pdf_engine_running(config.pdf_engine) then
+            notify("On-going conversion", "WARN")
+            return
+         end
 
          vim.system(command, { text = true }, function(obj)
             if obj.stderr ~= "" then
