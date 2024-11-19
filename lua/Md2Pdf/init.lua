@@ -45,8 +45,9 @@ local function start(config)
          -- start conversion job
          buffer_job[md_file].job_id = vim.fn.jobstart(command, {
             detach = true, -- keep converting even if nvim is closed
+            stderr_buffered = true,
             on_stderr = function(_, data)
-               local err_msg = data and table.concat(data, " ")
+               local err_msg = table.concat(data, "\n")
                if err_msg ~= "" then
                   return notify(err_msg, "WARN")
                end
