@@ -37,6 +37,7 @@ local function start(config)
          -- kill the previous buffer job to finish its latest job
          if buffer_job[md_file].job_id then
             vim.fn.jobstop(buffer_job[md_file].job_id)
+            buffer_job[md_file].job_id = nil
             notify("Re-converting...")
          end
 
@@ -48,7 +49,7 @@ local function start(config)
                local err_msg = table.concat(data, "\n")
                if err_msg ~= "" then
                   buffer_job[md_file].job_id = nil -- delete buffer job id if failed
-                  return notify(err_msg, "WARN")
+                  notify(err_msg, "WARN")
                end
             end,
             on_exit = function(_, code)
