@@ -15,6 +15,8 @@ end
 local function start(config)
    if autocmd_id then return end
 
+   local job_id
+
    autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*.md",
       group = vim.api.nvim_create_augroup("Md2Pdf", {}),
@@ -22,7 +24,6 @@ local function start(config)
          local md_file = vim.api.nvim_buf_get_name(0)
          local pdf_file = md_file:gsub("%.md$", ".pdf")
          local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
-         local job_id
 
          -- kill the previous job to finish the latest job
          if job_id then
