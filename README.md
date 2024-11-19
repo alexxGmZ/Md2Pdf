@@ -21,9 +21,9 @@ A Markdown to Pdf converter inside Neovim.
 
 <br>
 
-## WHY?
+## To Do:
 
-**Why not?**
+* [ ] Support multiple buffer/file conversion in one NeoVim session.
 
 <br>
 
