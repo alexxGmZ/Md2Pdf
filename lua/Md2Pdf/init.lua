@@ -49,6 +49,7 @@ local function start(config)
             on_stderr = function(_, data)
                local err_msg = table.concat(data, "\n")
                if err_msg ~= "" then
+                  buffer_job[md_file].job_id = nil
                   return notify(err_msg, "WARN")
                end
             end,
