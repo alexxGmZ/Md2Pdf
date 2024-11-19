@@ -28,10 +28,6 @@ local function start(config)
             buffer_job[md_file] = { job_id = nil }
          end
 
-         for key, value in pairs(buffer_job) do
-            print(key, vim.inspect(value))
-         end
-
          if not buffer_job[md_file].job_id then
             notify("Converting...")
          end
