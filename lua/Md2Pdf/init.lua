@@ -53,9 +53,8 @@ local function start(config)
                end
             end,
             on_exit = function(_, code)
+               buffer_job[md_file].job_id = nil    -- delete buffer job id on exit
                if code == 0 then
-                  buffer_job[md_file].job_id = nil -- delete buffer job id if failed
-
                   local success_message = {
                      "Pdf Engine: ", config.pdf_engine, "\n",
                      "md        : ", md_file, "\n",
