@@ -23,7 +23,7 @@ A Markdown to Pdf converter inside Neovim.
 
 ## To Do:
 
-* [ ] Support multiple buffer/file conversion in one NeoVim session.
+* [x] Support multiple buffer/file conversion in one NeoVim session.
 
 <br>
 
