@@ -25,6 +25,10 @@ local function start(config)
          local pdf_file = md_file:gsub("%.md$", ".pdf")
          local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
 
+         if not job_id then
+            notify("Converting...")
+         end
+
          -- kill the previous job to finish the latest job
          if job_id then
             vim.fn.jobstop(job_id)
