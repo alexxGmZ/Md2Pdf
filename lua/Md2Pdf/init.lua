@@ -24,6 +24,8 @@ local function start(config)
          local pdf_file = md_file:gsub("%.md$", ".pdf")
          local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
 
+         -- create a specific job for each buffer with the markdown filename as the key
+         -- each buffer has job_id
          if not buffer_job[md_file] then
             buffer_job[md_file] = { job_id = nil }
          end
@@ -32,7 +34,7 @@ local function start(config)
             notify("Converting...")
          end
 
-         -- kill the previous job to finish the latest job
+         -- kill the previous buffer job to finish its latest job
          if buffer_job[md_file].job_id then
             vim.fn.jobstop(buffer_job[md_file].job_id)
             notify("Re-converting...")
@@ -45,13 +47,13 @@ local function start(config)
             on_stderr = function(_, data)
                local err_msg = table.concat(data, "\n")
                if err_msg ~= "" then
-                  buffer_job[md_file].job_id = nil
+                  buffer_job[md_file].job_id = nil -- delete buffer job id if failed
                   return notify(err_msg, "WARN")
                end
             end,
             on_exit = function(_, code)
                if code == 0 then
-                  buffer_job[md_file].job_id = nil
+                  buffer_job[md_file].job_id = nil -- delete buffer job id if failed
 
                   local success_message = {
                      "Pdf Engine: ", config.pdf_engine, "\n",
