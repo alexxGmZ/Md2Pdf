@@ -28,15 +28,27 @@ local function start(config)
          -- kill the previous job to finish the latest job
          if job_id then
             vim.fn.jobstop(job_id)
+            notify("Re-converting...")
          end
 
-         -- start a job
+         -- start conversion job
          job_id = vim.fn.jobstart(command, {
             detach = true, -- keep converting even if nvim is closed
             on_stderr = function(_, data)
                local err_msg = data and table.concat(data, " ")
                if err_msg ~= "" then
                   return notify(err_msg, "WARN")
+               end
+            end,
+            on_exit = function(_, code)
+               if code == 0 then
+                  job_id = nil -- empty the job id as a sign that the job is finished
+                  local success_message = {
+                     "Pdf Engine: ", config.pdf_engine, "\n",
+                     "md        : ", md_file, "\n",
+                     "pdf       : ", pdf_file
+                  }
+                  notify(table.concat(success_message))
                end
             end
          })
