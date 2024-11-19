@@ -1,6 +1,7 @@
 local default_config = require("Md2Pdf.config").default_config
 local autocmd_id
 local M = {}
+local buffer_job = {}
 
 --- vim.notify with nvim-notify support
 ---@param message string|table
@@ -15,8 +16,6 @@ end
 local function start(config)
    if autocmd_id then return end
 
-   local job_id
-
    autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = "*.md",
       group = vim.api.nvim_create_augroup("Md2Pdf", {}),
@@ -25,18 +24,26 @@ local function start(config)
          local pdf_file = md_file:gsub("%.md$", ".pdf")
          local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
 
-         if not job_id then
+         if not buffer_job[md_file] then
+            buffer_job[md_file] = { job_id = nil }
+         end
+
+         for key, value in pairs(buffer_job) do
+            print(key, vim.inspect(value))
+         end
+
+         if not buffer_job[md_file].job_id then
             notify("Converting...")
          end
 
          -- kill the previous job to finish the latest job
-         if job_id then
-            vim.fn.jobstop(job_id)
+         if buffer_job[md_file].job_id then
+            vim.fn.jobstop(buffer_job[md_file].job_id)
             notify("Re-converting...")
          end
 
          -- start conversion job
-         job_id = vim.fn.jobstart(command, {
+         buffer_job[md_file].job_id = vim.fn.jobstart(command, {
             detach = true, -- keep converting even if nvim is closed
             on_stderr = function(_, data)
                local err_msg = data and table.concat(data, " ")
@@ -46,7 +53,8 @@ local function start(config)
             end,
             on_exit = function(_, code)
                if code == 0 then
-                  job_id = nil -- empty the job id as a sign that the job is finished
+                  buffer_job[md_file].job_id = nil
+
                   local success_message = {
                      "Pdf Engine: ", config.pdf_engine, "\n",
                      "md        : ", md_file, "\n",
