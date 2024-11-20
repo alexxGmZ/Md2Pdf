@@ -35,29 +35,34 @@ local function convert_md(md_file)
       notify("Re-converting...")
    end
 
+   --- Handle job on error
+   local function on_stderr(_, data)
+      local err_msg = table.concat(data, "\n")
+      if err_msg ~= "" then
+         buffer_jobs[md_file].job_id = nil -- delete buffer job id if failed
+         notify(err_msg, "WARN")
+      end
+   end
+
+   --- Handle job on exit
+   local function on_exit(_, code)
+      if code == 0 then
+         local success_message = {
+            "Pdf Engine: ", config.pdf_engine, "\n",
+            "md        : ", md_file, "\n",
+            "pdf       : ", pdf_file
+         }
+         notify(table.concat(success_message))
+         buffer_jobs[md_file].job_id = nil -- delete buffer job id if failed
+      end
+   end
+
    -- start conversion job
    buffer_jobs[md_file].job_id = vim.fn.jobstart(command, {
-      detach = true,       -- keep converting even if nvim is closed
+      detach = true, -- keep converting even if nvim is closed
       stderr_buffered = true,
-      on_stderr = function(_, data)
-         local err_msg = table.concat(data, "\n")
-         if err_msg ~= "" then
-            buffer_jobs[md_file].job_id = nil       -- delete buffer job id if failed
-            notify(err_msg, "WARN")
-         end
-      end,
-      on_exit = function(_, code)
-         if code == 0 then
-            buffer_jobs[md_file].job_id = nil       -- delete buffer job id if failed
-
-            local success_message = {
-               "Pdf Engine: ", config.pdf_engine, "\n",
-               "md        : ", md_file, "\n",
-               "pdf       : ", pdf_file
-            }
-            notify(table.concat(success_message))
-         end
-      end
+      on_stderr = on_stderr,
+      on_exit = on_exit,
    })
 end
 
