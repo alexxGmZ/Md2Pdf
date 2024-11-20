@@ -26,11 +26,8 @@ local function convert_md(md_file)
 
    -- create a specific job for each buffer with the markdown filename as the key
    -- each buffer has job_id
-   if not buffer_jobs[md_file] then
+   if not buffer_jobs[md_file] or not buffer_jobs[md_file].job_id  then
       buffer_jobs[md_file] = { job_id = nil }
-   end
-
-   if not buffer_jobs[md_file].job_id then
       notify("Converting...")
    end
 
