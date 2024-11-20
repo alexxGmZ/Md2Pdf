@@ -15,6 +15,10 @@ end
 --- Convert markdown to pdf job
 ---@param md_file string
 local function convert_md(md_file)
+   if not config.pdf_engine or config.pdf_engine == "" then
+      return notify("Specify 'pdf_engine' in the config file", "WARN")
+   end
+
    local pdf_file = md_file:gsub("%.md$", ".pdf")
    local command = {
       "pandoc",
