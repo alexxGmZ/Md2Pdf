@@ -6,16 +6,15 @@ Table of Contents                                   *Md2Pdf-table-of-contents*
 1. Md2Pdf                                                      |Md2Pdf-md2pdf|
   - To Do:                                              |Md2Pdf-md2pdf-to-do:|
   - Installation                                  |Md2Pdf-md2pdf-installation|
-  - Usage                                                |Md2Pdf-md2pdf-usage|
   - Configuration                                |Md2Pdf-md2pdf-configuration|
+  - Usage                                                |Md2Pdf-md2pdf-usage|
+  - Variable specification (-V flag)|Md2Pdf-md2pdf-variable-specification-(-v-flag)|
 
 ==============================================================================
 1. Md2Pdf                                                      *Md2Pdf-md2pdf*
 
 A simple Markdown to Pdf converter inside Neovim.
 
-
-  [!WARNING] Currently in Beta state.
 
 
 **Dependencies:**
@@ -36,7 +35,7 @@ A simple Markdown to Pdf converter inside Neovim.
 TO DO:                                                  *Md2Pdf-md2pdf-to-do:*
 
 - ☒ Support multiple buffer/file conversion in one NeoVim session.
-- ☐ Support specifying YAML template file.
+- ☒ Support YAML metadata template file.
 
 
 
@@ -50,6 +49,18 @@ INSTALLATION                                      *Md2Pdf-md2pdf-installation*
        "alexxGmZ/Md2Pdf",
        cmd = "Md2Pdf"
     }
+<
+
+
+
+
+CONFIGURATION                                    *Md2Pdf-md2pdf-configuration*
+
+>lua
+    require("Md2Pdf").setup({
+       pdf_engine = "pdflatex" -- pdflatex, lualatex, or xelatex
+       yaml_template_path = nil
+    })
 <
 
 
@@ -77,11 +88,17 @@ Convert manually.
     :Md2Pdf convert
 <
 
+
+
+
+VARIABLE SPECIFICATION (-V FLAG)*Md2Pdf-md2pdf-variable-specification-(-v-flag)*
+
+
+  [!NOTE] Read the pandoc documentation or Google it to know more about
+  variables.
 Add **Variables** in the Markdown file by adding YAML metadata blocks at the
 top.
 
-
-  [!NOTE] Just read the pandoc documentation or Google it to know more.
 >markdown
     ---
     header-includes:
@@ -93,16 +110,17 @@ top.
     fontsize: 12pt
     monofont: "FiraCode Nerd Font"
     ...
+    
+    # Markdown Title
 <
 
-
-
-
-CONFIGURATION                                    *Md2Pdf-md2pdf-configuration*
+Or create a YAML template file and place the template path in the config’s
+`yaml_template_path`.
 
 >lua
     require("Md2Pdf").setup({
        pdf_engine = "pdflatex" -- pdflatex, lualatex, or xelatex
+       yaml_template_path = "/home/user/template.yml"
     })
 <
 
