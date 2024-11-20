@@ -2,7 +2,7 @@ local default_config = require("Md2Pdf.config").default_config
 local config = {}
 local autocmd_id
 local M = {}
-local buffer_job = {}
+local buffer_jobs = {}
 
 --- vim.notify with nvim-notify support
 ---@param message string|table
@@ -20,35 +20,35 @@ local function convert_md(md_file)
 
    -- create a specific job for each buffer with the markdown filename as the key
    -- each buffer has job_id
-   if not buffer_job[md_file] then
-      buffer_job[md_file] = { job_id = nil }
+   if not buffer_jobs[md_file] then
+      buffer_jobs[md_file] = { job_id = nil }
    end
 
-   if not buffer_job[md_file].job_id then
+   if not buffer_jobs[md_file].job_id then
       notify("Converting...")
    end
 
    -- kill the previous buffer job to finish its latest job
-   if buffer_job[md_file].job_id then
-      vim.fn.jobstop(buffer_job[md_file].job_id)
-      buffer_job[md_file].job_id = nil
+   if buffer_jobs[md_file].job_id then
+      vim.fn.jobstop(buffer_jobs[md_file].job_id)
+      buffer_jobs[md_file].job_id = nil
       notify("Re-converting...")
    end
 
    -- start conversion job
-   buffer_job[md_file].job_id = vim.fn.jobstart(command, {
+   buffer_jobs[md_file].job_id = vim.fn.jobstart(command, {
       detach = true,       -- keep converting even if nvim is closed
       stderr_buffered = true,
       on_stderr = function(_, data)
          local err_msg = table.concat(data, "\n")
          if err_msg ~= "" then
-            buffer_job[md_file].job_id = nil       -- delete buffer job id if failed
+            buffer_jobs[md_file].job_id = nil       -- delete buffer job id if failed
             notify(err_msg, "WARN")
          end
       end,
       on_exit = function(_, code)
          if code == 0 then
-            buffer_job[md_file].job_id = nil       -- delete buffer job id if failed
+            buffer_jobs[md_file].job_id = nil       -- delete buffer job id if failed
 
             local success_message = {
                "Pdf Engine: ", config.pdf_engine, "\n",
