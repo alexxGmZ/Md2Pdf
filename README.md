@@ -1,6 +1,6 @@
 # Md2Pdf
 
-A Markdown to Pdf converter inside Neovim.
+A simple Markdown to Pdf converter inside Neovim.
 
 > [!WARNING]
 > Currently in Beta state.
@@ -24,6 +24,7 @@ A Markdown to Pdf converter inside Neovim.
 ## To Do:
 
 * [x] Support multiple buffer/file conversion in one NeoVim session.
+* [ ] Support specifying YAML template file.
 
 <br>
 
