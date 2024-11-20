@@ -16,7 +16,13 @@ end
 ---@param md_file string
 local function convert_md(md_file)
    local pdf_file = md_file:gsub("%.md$", ".pdf")
-   local command = { "pandoc", md_file, "--pdf-engine=" .. config.pdf_engine, "-o", pdf_file }
+   local command = {
+      "pandoc",
+      md_file,
+      "--pdf-engine=" .. config.pdf_engine,
+      "-o",
+      pdf_file
+   }
 
    -- create a specific job for each buffer with the markdown filename as the key
    -- each buffer has job_id
