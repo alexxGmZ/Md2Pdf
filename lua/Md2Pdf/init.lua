@@ -24,6 +24,10 @@ local function convert_md(md_file)
       pdf_file
    }
 
+   if config.yaml_template_path and config.yaml_template_path ~= "" then
+      table.insert(command, "--metadata-file=" .. config.yaml_template_path)
+   end
+
    -- create a specific job for each buffer with the markdown filename as the key
    -- each buffer has job_id
    if not buffer_jobs[md_file] or not buffer_jobs[md_file].job_id  then
