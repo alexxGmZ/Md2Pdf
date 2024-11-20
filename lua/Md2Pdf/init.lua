@@ -15,6 +15,11 @@ end
 --- Convert markdown to pdf job
 ---@param md_file string
 local function convert_md(md_file)
+   -- check if md_file is markdown
+   if not md_file:match("%.md$") then
+      return notify("Not a markdown file", "WARN")
+   end
+
    if not config.pdf_engine or config.pdf_engine == "" then
       return notify("Specify 'pdf_engine' in the config file", "WARN")
    end
