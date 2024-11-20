@@ -2,9 +2,6 @@
 
 A simple Markdown to Pdf converter inside Neovim.
 
-> [!WARNING]
-> Currently in Beta state.
-
 <br>
 
 **Dependencies:**
@@ -24,7 +21,7 @@ A simple Markdown to Pdf converter inside Neovim.
 ## To Do:
 
 * [x] Support multiple buffer/file conversion in one NeoVim session.
-* [ ] Support specifying YAML template file.
+* [x] Support YAML metadata template file.
 
 <br>
 
@@ -37,6 +34,17 @@ A simple Markdown to Pdf converter inside Neovim.
    "alexxGmZ/Md2Pdf",
    cmd = "Md2Pdf"
 }
+```
+
+<br>
+
+## Configuration
+
+```lua
+require("Md2Pdf").setup({
+   pdf_engine = "pdflatex" -- pdflatex, lualatex, or xelatex
+   yaml_template_path = nil
+})
 ```
 
 <br>
@@ -63,10 +71,14 @@ Convert manually.
 :Md2Pdf convert
 ```
 
-Add **Variables** in the Markdown file by adding YAML metadata blocks at the top.
+<br>
+
+## Variable specification (-V flag)
 
 > [!NOTE]
-> Just read the pandoc documentation or Google it to know more.
+> Read the pandoc documentation or Google it to know more about variables.
+
+Add **Variables** in the Markdown file by adding YAML metadata blocks at the top.
 
 ```markdown
 ---
@@ -79,14 +91,17 @@ geometry:
 fontsize: 12pt
 monofont: "FiraCode Nerd Font"
 ...
+
+# Markdown Title
 ```
 
-<br>
-
-## Configuration
+Or create a YAML template file and place the template path in the config's
+`yaml_template_path`.
 
 ```lua
 require("Md2Pdf").setup({
    pdf_engine = "pdflatex" -- pdflatex, lualatex, or xelatex
+   yaml_template_path = "/home/user/template.yml"
 })
 ```
+
