@@ -56,6 +56,12 @@ Stop converting.
 :Md2Pdf stop
 ```
 
+Convert manually.
+
+```
+:Md2Pdf convert
+```
+
 Add **Variables** in the Markdown file by adding YAML metadata blocks at the top.
 
 > [!NOTE]
