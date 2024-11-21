@@ -36,6 +36,7 @@ TO DO:                                                  *Md2Pdf-md2pdf-to-do:*
 
 - ☒ Support multiple buffer/file conversion in one NeoVim session.
 - ☒ Support YAML metadata template file.
+- ☐ Improve config handling.
 
 
 
