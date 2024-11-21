@@ -22,6 +22,7 @@ A simple Markdown to Pdf converter inside Neovim.
 
 * [x] Support multiple buffer/file conversion in one NeoVim session.
 * [x] Support YAML metadata template file.
+* [ ] Improve config handling.
 
 <br>
 
