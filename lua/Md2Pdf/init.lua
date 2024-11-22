@@ -1,5 +1,5 @@
 local config = require("Md2Pdf.config")
-local plugin_opts = {}
+local plugin_opts
 local autocmd_id
 local M = {}
 local buffer_jobs = {}
@@ -20,10 +20,6 @@ local function convert_md(md_file)
       return notify("Not a markdown file", "WARN")
    end
 
-   if not plugin_opts.pdf_engine or plugin_opts.pdf_engine == "" then
-      return notify("Specify 'pdf_engine' in the config file", "WARN")
-   end
-
    local pdf_file = md_file:gsub("%.md$", ".pdf")
    local command = {
       "pandoc",
@@ -34,12 +30,12 @@ local function convert_md(md_file)
    }
 
    if plugin_opts.yaml_template_path and plugin_opts.yaml_template_path ~= "" then
-      table.insert(command, "--metadata-file=" .. plugin_opts.yaml_template_path)
+      table.insert(command, 4, "--metadata-file=" .. plugin_opts.yaml_template_path)
    end
 
    -- create a specific job for each buffer with the markdown filename as the key
    -- each buffer has job_id
-   if not buffer_jobs[md_file] or not buffer_jobs[md_file].job_id  then
+   if not buffer_jobs[md_file] or not buffer_jobs[md_file].job_id then
       buffer_jobs[md_file] = { job_id = nil }
       notify("Converting...")
    end
@@ -109,7 +105,6 @@ end
 function M.setup(usr_opts)
    vim.api.nvim_create_user_command("Md2Pdf", function(args)
       local arg = args.fargs[1] or ""
-
       plugin_opts = config.handle_user_config(usr_opts)
 
       if arg == "stop" then
