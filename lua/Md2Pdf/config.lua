@@ -9,7 +9,7 @@ M.default_opts = {
 ---@param opts table -- User config options
 ---@return table -- Final config to utilize by the plugin
 function M.handle_user_config(opts)
-   local final_config = M.default_opts
+   local final_config = {}
 
    -- if opts is empty, then use default_opts
    if not opts or not next(opts) then
@@ -17,9 +17,7 @@ function M.handle_user_config(opts)
    end
 
    -- update the default values of final_config with user opts
-   for index, _ in pairs(opts) do
-      final_config[index] = opts[index]
-   end
+   final_config = vim.tbl_extend("force", M.default_opts, opts)
 
    return final_config
 end
