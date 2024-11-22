@@ -65,7 +65,7 @@ local function convert_md(md_file)
             "pdf       : ", pdf_file
          }
          notify(table.concat(success_message))
-         buffer_jobs[md_file].job_id = nil -- delete buffer job id if failed
+         buffer_jobs[md_file].job_id = nil -- delete buffer job id
       end
    end
 
