@@ -1,5 +1,5 @@
-local default_config = require("Md2Pdf.config").default_config
-local config = {}
+local config = require("Md2Pdf.config")
+local plugin_opts = {}
 local autocmd_id
 local M = {}
 local buffer_jobs = {}
@@ -20,7 +20,7 @@ local function convert_md(md_file)
       return notify("Not a markdown file", "WARN")
    end
 
-   if not config.pdf_engine or config.pdf_engine == "" then
+   if not plugin_opts.pdf_engine or plugin_opts.pdf_engine == "" then
       return notify("Specify 'pdf_engine' in the config file", "WARN")
    end
 
@@ -28,13 +28,13 @@ local function convert_md(md_file)
    local command = {
       "pandoc",
       md_file,
-      "--pdf-engine=" .. config.pdf_engine,
+      "--pdf-engine=" .. plugin_opts.pdf_engine,
       "-o",
       pdf_file
    }
 
-   if config.yaml_template_path and config.yaml_template_path ~= "" then
-      table.insert(command, "--metadata-file=" .. config.yaml_template_path)
+   if plugin_opts.yaml_template_path and plugin_opts.yaml_template_path ~= "" then
+      table.insert(command, "--metadata-file=" .. plugin_opts.yaml_template_path)
    end
 
    -- create a specific job for each buffer with the markdown filename as the key
@@ -64,7 +64,7 @@ local function convert_md(md_file)
    local function on_exit(_, code)
       if code == 0 then
          local success_message = {
-            "Pdf Engine: ", config.pdf_engine, "\n",
+            "Pdf Engine: ", plugin_opts.pdf_engine, "\n",
             "md        : ", md_file, "\n",
             "pdf       : ", pdf_file
          }
@@ -105,15 +105,12 @@ local function stop()
 end
 
 --- Setup the plugin.
----@param opts table Configuration options
-function M.setup(opts)
+---@param usr_opts table Configuration options
+function M.setup(usr_opts)
    vim.api.nvim_create_user_command("Md2Pdf", function(args)
       local arg = args.fargs[1] or ""
 
-      config = default_config
-      if opts and next(opts) then
-         config = opts
-      end
+      plugin_opts = config.handle_user_config(usr_opts)
 
       if arg == "stop" then
          return stop()
