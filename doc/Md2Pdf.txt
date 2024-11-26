@@ -24,6 +24,9 @@ A simple Markdown to Pdf converter inside Neovim.
     - texlive-luatex (for lualatex)
     - texlive-xetex (for xelatex)
 
+Run `:checkhealth Md2Pdf` after installing to check if dependencies are
+installed.
+
 **Recommended Pdf Viewers:**
 
 - zathura <https://pwmt.org/projects/zathura/>
