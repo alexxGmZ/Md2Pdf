@@ -4,6 +4,7 @@
 Table of Contents                                   *Md2Pdf-table-of-contents*
 
 1. Md2Pdf                                                      |Md2Pdf-md2pdf|
+  - Dependencies                                  |Md2Pdf-md2pdf-dependencies|
   - To Do:                                              |Md2Pdf-md2pdf-to-do:|
   - Installation                                  |Md2Pdf-md2pdf-installation|
   - Configuration                                |Md2Pdf-md2pdf-configuration|
@@ -17,7 +18,8 @@ A simple Markdown to Pdf converter inside Neovim.
 
 
 
-**Dependencies:**
+
+DEPENDENCIES                                      *Md2Pdf-md2pdf-dependencies*
 
 - pandoc <https://pandoc.org/>
 - Optional (if you want to use other pdf engine other than pdflatex):
