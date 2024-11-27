@@ -4,7 +4,7 @@ A simple Markdown to Pdf converter inside Neovim.
 
 <br>
 
-**Dependencies:**
+## Dependencies
 
 * [pandoc](https://pandoc.org/)
 * Optional (if you want to use other pdf engine other than pdflatex):
