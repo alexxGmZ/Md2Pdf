@@ -91,6 +91,8 @@ local function start()
          -- vim.print(vim.inspect(buffer_job))
       end
    })
+
+   notify("Auto conversion started", "WARN")
 end
 
 --- Stop the auto command
@@ -98,6 +100,8 @@ local function stop()
    if not autocmd_id then return end
    vim.api.nvim_del_autocmd(autocmd_id)
    autocmd_id = nil
+
+   notify("Auto conversion stopped")
 end
 
 --- Setup the plugin.
