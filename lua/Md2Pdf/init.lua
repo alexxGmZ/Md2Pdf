@@ -60,6 +60,7 @@ local function convert_md(md_file)
    local function on_exit(_, code)
       if code == 0 then
          local success_message = {
+            " Markdown converted successfully", "\n",
             "Pdf Engine: ", plugin_opts.pdf_engine, "\n",
             "md        : ", md_file, "\n",
             "pdf       : ", pdf_file
