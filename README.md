@@ -2,6 +2,8 @@
 
 A simple Markdown to Pdf converter inside Neovim.
 
+https://github.com/user-attachments/assets/6d782d02-e25a-4053-9b6d-f2aa737635f4
+
 <br>
 
 ## Dependencies
