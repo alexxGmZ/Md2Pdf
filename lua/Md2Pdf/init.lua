@@ -1,4 +1,3 @@
-local config = require("Md2Pdf.config")
 local plugin_opts
 local autocmd_id
 local M = {}
@@ -110,6 +109,7 @@ end
 function M.setup(usr_opts)
    vim.api.nvim_create_user_command("Md2Pdf", function(args)
       local arg = args.fargs[1] or ""
+      local config = require("Md2Pdf.config")
       plugin_opts = config.handle_user_config(usr_opts)
 
       if arg == "stop" then
