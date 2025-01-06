@@ -64,7 +64,7 @@ located in the same directory as the Markdown file.
 :Md2Pdf start
 ```
 
-Stop converting.
+Stop the auto-converting after saving or writing the file.
 
 ```
 :Md2Pdf stop
